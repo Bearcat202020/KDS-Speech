@@ -45,6 +45,10 @@
         <h4>Sign up</h4><br />
         <form id="signup-form">
           <div class="input-field">
+            <input type="text" id="signup-name" required />
+            <label for="login-email">Name</label>
+          </div>
+          <div class="input-field">
             <input type="email" id="signup-email" required />
             <label for="signup-email">Email address</label>
           </div>
@@ -104,7 +108,7 @@
     <!-- GUIDE LIST -->
     <div class="container" style="margin-top: 40px;">
       <ul class="collapsible z-depth-0 guides" style="border: none;">
-        <li>
+        <!--<li>
           <div class="collapsible-header grey lighten-4">Guide title</div>
           <div class="collapsible-body white">Lorem ipsum dolor sit amet.</div>
         </li>
@@ -119,7 +123,7 @@
         <li>
           <div class="collapsible-header grey lighten-4">Guide title</div>
           <div class="collapsible-body white"><span>Lorem ipsum dolor sit amet.</span></div>
-        </li>
+        </li> -->
       </ul>
     </div>
 
@@ -129,6 +133,8 @@
     <script src="/__/firebase/7.15.0/firebase-database.js"></script>
     <script src="/__/firebase/7.15.0/firebase-messaging.js"></script>
     <script src="/__/firebase/7.15.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
     <!-- initialize the SDK after all desired features are loaded -->
     <script src="/__/firebase/init.js"></script>
 
