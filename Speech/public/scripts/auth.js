@@ -1,10 +1,6 @@
 const auth = firebase.auth()
 const db = firebase.firestore()
 
-
-
-
-
 //signing up
 const signupForm = $("#signup-form")[0];
 signupForm.addEventListener('submit', (e) => {
@@ -60,9 +56,13 @@ logout.addEventListener('click', (e) => {
 });
 
 
+const inNavs = document.querySelectorAll(".logged-in");
+const outNavs = document.querySelectorAll(".logged-out");
 
 auth.onAuthStateChanged(user => {
   if(user){
+
+
 
     //GRABS ALL DATA UNDERNEATH YOUR NAME
     db.collection("users").doc(user.uid).collection("Practices").get().then(qSnap => {
@@ -76,12 +76,26 @@ auth.onAuthStateChanged(user => {
         html += "<li><div class='collapsible-header grey lighten-4'>Practice with: " + coach + "</div><div class='collapsible-body white'><span>" + feedback + "</span></div>"
 
       });
-
-      $(".guides").html(html);
+      $(".guides").html(html)
     });
+
+    //hides the parts of navbar you don't want to see
+    inNavs.forEach(nav => nav.style.display =  "block");
+    outNavs.forEach(nav => nav.style.display =  "none");
+
+
   }
   else{
+
+    //tells the user to log in to see information
     $(".guides").html("<li><div class='collapsible-header grey lighten-4'>Please Login/SignUp to see practices</div><div class='collapsible-body white'><span>Lorem ipsum dolor sit amet.</span></div>")
+
+    //hides parts of navbar you don't want to See
+    inNavs.forEach(nav => nav.style.display =  "none");
+    outNavs.forEach(nav => nav.style.display =  "block");
+
+
+
 
   }
 
