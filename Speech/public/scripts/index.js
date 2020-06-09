@@ -1,3 +1,5 @@
+const auth = firebase.auth()
+const db = firebase.firestore()
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -70,3 +72,37 @@ feedForm.addEventListener('submit', (e) => {
     feedForm.reset();
 
 })
+
+const displayPractice = (data) => {
+  let html = ""
+  if(data != null){
+    data.forEach( doc =>  {
+      const practice = doc.data()
+      const coach = practice.Coach;
+      const feedback = practice.Feedback;
+
+      html += "<li><div class='collapsible-header grey lighten-4'>Practice with: " + coach + "</div><div class='collapsible-body white'><span>" + feedback + "</span></div>"
+
+    });
+    if(html == ""){
+      html = "You have no practices yet, silly!"
+    }
+    $(".guides").html(html)
+
+  }
+
+  else{
+    $(".guides").html("<li><div class='collapsible-header grey lighten-4'>Please Login/SignUp to see practices</div><div class='collapsible-body white'><span>Lorem ipsum dolor sit amet.</span></div>")
+  }
+
+}
+// 
+//
+// db.collection("users").onSnapshot( hey => {
+//   const currID = auth.currentUser.uid
+//   console.log(currID)
+//   db.collection("users").doc(currID).collection("Practices").get().then(qSnap => {
+//     console.log('WHY')
+//     displayPractice(qSnap)
+//   });
+// })

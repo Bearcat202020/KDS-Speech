@@ -1,5 +1,3 @@
-const auth = firebase.auth()
-const db = firebase.firestore()
 
 //signing up
 const signupForm = $("#signup-form")[0];
@@ -65,18 +63,8 @@ auth.onAuthStateChanged(user => {
 
 
     //GRABS ALL DATA UNDERNEATH YOUR NAME
-    db.collection("users").doc(user.uid).collection("Practices").get().then(qSnap => {
-
-      let html = ""
-      qSnap.forEach( doc =>  {
-        const practice = doc.data()
-        const coach = practice.Coach;
-        const feedback = practice.Feedback;
-
-        html += "<li><div class='collapsible-header grey lighten-4'>Practice with: " + coach + "</div><div class='collapsible-body white'><span>" + feedback + "</span></div>"
-
-      });
-      $(".guides").html(html)
+    db.collection("users").doc(user.uid).collection("Practices").onSnapshot(qSnap => {
+      displayPractice(qSnap)
     });
 
     //hides the parts of navbar you don't want to see
@@ -88,8 +76,7 @@ auth.onAuthStateChanged(user => {
   else{
 
     //tells the user to log in to see information
-    $(".guides").html("<li><div class='collapsible-header grey lighten-4'>Please Login/SignUp to see practices</div><div class='collapsible-body white'><span>Lorem ipsum dolor sit amet.</span></div>")
-
+    displayPractice(null)
     //hides parts of navbar you don't want to See
     inNavs.forEach(nav => nav.style.display =  "none");
     outNavs.forEach(nav => nav.style.display =  "block");
