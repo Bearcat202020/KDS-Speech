@@ -6,23 +6,28 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="shortcut icon" type = "image/png" href = "img/favicon.ico">
   <title>KDS Speech</title>
 </head>
 <body class="grey lighten-3">
 
 
-
     <!-- NAVBAR -->
     <nav class="z-depth-0 grey lighten-4">
-      <div class="nav-wrapper container">
-        <a href="#" class="brand-logo">
+      <div class="nav-wrapper container" id="navtext">
+        KENT DENVER SPEECH PRACTICES
+        <style>
+        #navtext{
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;;
+          color: #0066ff;
+          font-size: 25px;
+        }
+        </style>
+        <!--<a href="#" class="brand-logo">
           <img src="img/logo.png" style="width: 60px; margin-top: 10px;">
-        </a>
+        </a>-->
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li class="logged-in" style = "display: none;">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
-            </li>
             <li class="logged-in" style = "display: none;">
               <a href="#" class="grey-text" id="logout">Logout</a>
             </li>
@@ -33,7 +38,7 @@
               <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
             </li>
             <li class="logged-out" style = "display: none;">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+              <a href="#" class="grey-text modal-trigger"  data-target="modal-signup">Sign up</a>
             </li>
         </ul>
       </div>
@@ -42,6 +47,7 @@
 
 
     <!-- SIGN UP MODAL -->
+
     <div id="modal-signup" class="modal">
       <div class="modal-content">
         <h4>Sign up</h4><br />
@@ -58,12 +64,25 @@
             <input type="password" id="signup-password" required />
             <label for="signup-password">Choose password</label>
           </div>
+          <div class="input-field">
+            <input type="password" id="confirm-password" required />
+            <label for="signup-password">Confirm password</label>
+          </div>
+          <div>
+            <label>Are you a coach or student</label>
+            <select class="browser-default" id="coach-check">
+            <option value="" disabled selected>Please Pick an Option</option>
+            <option>Student</option>
+            <option>Coach</option>
+            </select>
+          </div>
+          <br>
           <button class="btn yellow darken-2 z-depth-0">Sign up</button>
         </form>
       </div>
     </div>
-
     <!-- LOGIN MODAL -->
+
     <div id="modal-login" class="modal">
       <div class="modal-content">
         <h4>Login</h4><br />
@@ -89,7 +108,7 @@
       </div>
     </div>
 
-    <!-- CREATE GUIDE MODAL -->
+    <!-- CREATE PRACTICE MODAL -->
     <div id="modal-create" class="modal">
       <div class="modal-content">
 
@@ -103,6 +122,20 @@
           <label>Student</label>
             <select class="browser-default" id="dropStudent">
             <option value="" disabled selected>Please Pick an Option</option>
+
+          </select>
+          <label>Event</label>
+          <select class="browser-default" id="dropEvent">
+          <option value="" disabled selected>Please Pick an Option</option>
+          <option>Drama</option>
+          <option>Duo</option>
+          <option>Humor</option>
+          <option>Info</option>
+          <option>IX</option>
+          <option>OO</option>
+          <option>Poetry</option>
+          <option>POI</option>
+          <option>USX</option>
 
           </select>
 
@@ -124,10 +157,23 @@
       </div>
     </div>
 
-    <!-- GUIDE LIST -->
-    <div class="container" style="margin-top: 40px;">
-      <ul class="collapsible z-depth-0 guides" style="border: none;">
 
+    <div class="container" style="margin-top: 40px;">
+      <label class = 'logged-in' display = 'none'>Event</label>
+      <select class="browser-default logged-in" display = 'none' id="eventQuery">
+        <option value="" disabled selected>Please Pick an Option</option>
+        <option>Drama</option>
+        <option>Duo</option>
+        <option>Humor</option>
+        <option>Info</option>
+        <option>IX</option>
+        <option>OO</option>
+        <option>Poetry</option>
+        <option>POI</option>
+        <option>USX</option>
+      </select>
+
+      <ul class="collapsible z-depth-0 practices" style="border: none;">
 
 
       </ul>

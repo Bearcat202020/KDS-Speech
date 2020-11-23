@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 const dropS = document.querySelector("#dropStudent");
+const dropE = document.querySelector("#dropEvent")
+const eventQuerying = document.querySelector("#eventQuery")
 const cGuide = $("#create-practice")[0];
+
 
 cGuide.addEventListener('click', (e) => {
   e.preventDefault();
@@ -25,11 +28,15 @@ cGuide.addEventListener('click', (e) => {
     let html = "<option value='' disabled selected>Choose your option</option>"
     let i = 1;
     qSnap.forEach( doc =>  {
+
+
       const data = doc.data()
       const name = data.name;
 
-      html += "<option value=\"" + String(i) + "\">" + name + "</option>"
-      i += 1;
+      if(!data.coach){
+        html += "<option value=\"" + String(i) + "\">" + name + "</option>"
+        i += 1;
+      }
 
     });
 
@@ -44,8 +51,9 @@ const feedForm = $("#feedback-form")[0];
 feedForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const feeds = $("#feed-area")[0].value;
+  var feeds = $("#feed-area")[0].value;
   const name = dropS.options[dropS.selectedIndex].text;
+  const speechEvent = dropE.options[dropE.selectedIndex].text;
   //queries for the name selected
   const user = db.collection("users").where("name", "==", name).get().then(function(querySnapshot) {
         querySnapshot.forEach(doc =>  {
@@ -53,9 +61,19 @@ feedForm.addEventListener('submit', (e) => {
 
           db.collection("users").doc(user.uid).get().then(doc2 => {
 
-            db.collection("users").doc(doc.id).collection("Practices").add({
+            var dateInSecs = "" + (100000000000000 - Date.now());
+
+            d = new Date(Date.now())
+            strDate =  "" + (d.getMonth() + 1)  + "/" + d.getDate() + "/" + d.getFullYear()
+
+            //MAKE IT SO FEEDS HAS A <br> OR SOMETHING THAT GETS PARSED OUT LATER
+            feeds = feeds.replace('\n', "<br />");
+            db.collection("users").doc(doc.id).collection("Practices").doc(dateInSecs).set({
               Feedback: feeds,
-              Coach: doc2.data().name
+              Coach: doc2.data().name,
+              Date: strDate,
+              Event: speechEvent
+
             });
 
           })
@@ -76,33 +94,48 @@ feedForm.addEventListener('submit', (e) => {
 const displayPractice = (data) => {
   let html = ""
   if(data != null){
+
+  const eventSelector = eventQuerying.options[eventQuerying.selectedIndex].text;
+
+
+
     data.forEach( doc =>  {
       const practice = doc.data()
       const coach = practice.Coach;
       const feedback = practice.Feedback;
+      const date = practice.Date;
+      const sEvent = practice.Event;
 
-      html += "<li><div class='collapsible-header grey lighten-4'>Practice with: " + coach + "</div><div class='collapsible-body white'><span>" + feedback + "</span></div>"
-
+      if(sEvent==eventSelector){
+        html += "<li><div class='collapsible-header grey lighten-4'>Practice with: " + coach + " on " + date + "<i class='material-icons right-align' onclick='removePractice(" + doc.id + ")'>delete</i></div><div class='collapsible-body white'><span>" + feedback + "</span></div>"
+      }
     });
     if(html == ""){
-      html = "You have no practices yet, silly!"
+      html = "You have no practices in this event. Try selecting a different one to view your practices!"
     }
-    $(".guides").html(html)
+
+    //grabs name and puts it before html
+    db.collection("users").doc(auth.currentUser.uid).get().then(function(doc){
+      $(".practices").html("<h3>Welcome: " + doc.data().name + "! </h3><br>" + html)
+    });
+
 
   }
 
   else{
-    $(".guides").html("<li><div class='collapsible-header grey lighten-4'>Please Login/SignUp to see practices</div><div class='collapsible-body white'><span>Lorem ipsum dolor sit amet.</span></div>")
+    $(".practices").html("<li><div class='collapsible-header grey lighten-4'>Please log in or sign up to view your practices!</div></li>")
   }
 
 }
-// 
-//
-// db.collection("users").onSnapshot( hey => {
-//   const currID = auth.currentUser.uid
-//   console.log(currID)
-//   db.collection("users").doc(currID).collection("Practices").get().then(qSnap => {
-//     console.log('WHY')
-//     displayPractice(qSnap)
-//   });
-// })
+
+
+
+const removePractice = (id) => {
+  if (confirm('Are you sure you want to delete this practice?')) {
+    db.collection("users").doc(auth.currentUser.uid).collection("Practices").doc(id.toString()).delete().then(function(){
+      console.log('deleted succesfully')
+    }).catch(function(error){
+      console.log('problem deleting')
+  });
+  }
+}
